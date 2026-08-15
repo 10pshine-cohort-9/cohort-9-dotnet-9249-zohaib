@@ -27,6 +27,28 @@ public class AuthService: IAuthService
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request) {
+        ArgumentNullException.ThrowIfNull(request);
+
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            throw new AppException("Email is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Password))
+        {
+            throw new AppException("Password is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.PasswordConfirm))
+        {
+            throw new AppException("Password confirmation is required.");
+        }
+
+        if (!string.Equals(request.Password, request.PasswordConfirm))
+        {
+            throw new AppException("Passwords do not match.");
+        }
+
         if(!string.Equals(request.Password, request.PasswordConfirm))
         {
             throw new AppException("Passwords do not match");
@@ -35,7 +57,7 @@ public class AuthService: IAuthService
         var existingEmail = await _userRepository.GetByEmailAsync(request.Email.Trim());
         if(existingEmail is not null)
         {
-            throw new AppException("Email is already registered.");
+            throw new AppException("Unable to register.");
         }
 
         var user = new User
@@ -54,6 +76,18 @@ public class AuthService: IAuthService
     
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            throw new AppException("Email is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Password))
+        {
+            throw new AppException("Password is required.");
+        }
+
         var user = await _userRepository.GetByEmailAsync(request.Email.Trim());
         if (user is null || !_passwordHasher.VerifyPassword(request.Password, user.Password))
         {
@@ -65,6 +99,11 @@ public class AuthService: IAuthService
 
     public async Task<AuthResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            throw new AppException("Refresh token is required.");
+        }
+
         var tokenHash = _tokenService.HashRefreshToken(request.RefreshToken);
         var storedToken = await _refreshTokenRepository.GetTokenByHashAsync(tokenHash) 
             ?? throw new UnauthorizedException("Invalid or expired refresh token");
