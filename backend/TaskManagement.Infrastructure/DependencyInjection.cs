@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IRefreshTokenRepository, Repositories.RefreshTokenRepository>();
         services.AddScoped<ITokenService, Security.TokenService>();
         services.AddScoped<IPasswordHasher, Security.PasswordHasher>();
+        services.AddScoped<ITaskRepository, Repositories.TaskRepository>();
         return services;
     }
 

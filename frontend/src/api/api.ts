@@ -1,5 +1,15 @@
 import axios from 'axios';
-import type { AuthResponse, LoginFormData, RegisterFormData, User } from '../types';
+import type { 
+  AuthResponse,
+  LoginFormData,
+  RegisterFormData,
+  User,
+  DashboardStats,
+  PagedResult,
+  Task,
+  TaskFormData,
+  TaskListQuery,
+} from '../types';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -162,3 +172,23 @@ export const authApi = {
 };
 
 
+export const tasksApi = {
+  getTasks: (query: TaskListQuery) =>
+    apiClient.get<PagedResult<Task>>('/tasks', { params: query }).then((r) => r.data),
+
+  getTask: (id: number) => apiClient.get<Task>(`/tasks/${id}`).then((r) => r.data),
+
+  createTask: (data: TaskFormData) =>
+    apiClient.post<Task>('/tasks', data).then((r) => r.data),
+
+  updateTask: (id: number, data: TaskFormData) =>
+    apiClient.put<Task>(`/tasks/${id}`, data).then((r) => r.data),
+
+  deleteTask: (id: number) => apiClient.delete(`/tasks/${id}`),
+
+  getDashboardStats: () =>
+    apiClient.get<DashboardStats>('/tasks/dashboard-stats').then((r) => r.data),
+
+  getAssignableUsers: () =>
+    apiClient.get<User[]>('/tasks/assignable-users').then((r) => r.data),
+};

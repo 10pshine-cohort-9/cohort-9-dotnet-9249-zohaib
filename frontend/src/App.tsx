@@ -1,14 +1,13 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
-import ProtectedRoute from './components/ProtectedRoute';
-import Layout from './components/Layout';
-import DashboardPage from './pages/DashboardPage';
-
-
+import TaskDetailPage from './pages/TaskDetailPage';
+import TaskFormPage from './pages/TaskFormPage';
 
 export default function App() {
   return (
@@ -20,6 +19,9 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/tasks/new" element={<TaskFormPage />} />
+              <Route path="/tasks/:id" element={<TaskDetailPage />} />
+              <Route path="/tasks/:id/edit" element={<TaskFormPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>

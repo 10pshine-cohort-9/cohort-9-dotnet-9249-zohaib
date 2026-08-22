@@ -26,7 +26,8 @@ public class User {
     public DateTime createdAt {get; set; } = DateTime.UtcNow;
 
     public ICollection<RefreshToken> RefreshTokens {get; set; } = new List<RefreshToken>();
-
+    public ICollection<TaskItem> CreatedTasks { get; set; } = new List<TaskItem>();
+    public ICollection<TaskItem> AssignedTasks { get; set; } = new List<TaskItem>();
 
 }
 

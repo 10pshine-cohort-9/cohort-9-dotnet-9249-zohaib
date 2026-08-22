@@ -13,6 +13,8 @@ public class AppDbContext: DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<TaskItem> Tasks => Set<TaskItem>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity => 
@@ -32,6 +34,23 @@ public class AppDbContext: DbContext
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<TaskItem>(entity =>
+        {
+            entity.Property(t => t.Status).HasConversion<string>();
+            entity.Property(t => t.Priority).HasConversion<string>();
+
+            entity.HasOne(t => t.AssignedUser)
+                .WithMany(u => u.AssignedTasks)
+                .HasForeignKey(t => t.AssignedUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(t => t.CreatedBy)
+                .WithMany(u => u.CreatedTasks)
+                .HasForeignKey(t => t.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
     }
 }
 
