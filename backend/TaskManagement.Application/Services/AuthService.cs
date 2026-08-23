@@ -29,6 +29,11 @@ public class AuthService: IAuthService
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request) {
         ArgumentNullException.ThrowIfNull(request);
 
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            throw new AppException("Name is required.");
+        }
+
         if (string.IsNullOrWhiteSpace(request.Email))
         {
             throw new AppException("Email is required.");
@@ -49,12 +54,8 @@ public class AuthService: IAuthService
             throw new AppException("Passwords do not match.");
         }
 
-        if(!string.Equals(request.Password, request.PasswordConfirm))
-        {
-            throw new AppException("Passwords do not match");
-        }
-
         var existingEmail = await _userRepository.GetByEmailAsync(request.Email.Trim());
+
         if(existingEmail is not null)
         {
             throw new AppException("Unable to register.");
@@ -99,6 +100,7 @@ public class AuthService: IAuthService
 
     public async Task<AuthResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
         if (string.IsNullOrWhiteSpace(request.RefreshToken))
         {
             throw new AppException("Refresh token is required.");
@@ -115,6 +117,12 @@ public class AuthService: IAuthService
 
     public async Task LogoutAsync(RefreshTokenRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            throw new AppException("Refresh token is required.");
+        }
+        
         var tokenHash = _tokenService.HashRefreshToken(request.RefreshToken);
         var storedToken = await _refreshTokenRepository.GetTokenByHashAsync(tokenHash);
 

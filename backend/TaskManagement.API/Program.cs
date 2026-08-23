@@ -56,7 +56,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
-var jwtKey = builder.Configuration["Jwt:Key"]!;
+var jwtKey = builder.Configuration["Jwt:Key"];
+ArgumentException.ThrowIfNullOrWhiteSpace(jwtKey);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

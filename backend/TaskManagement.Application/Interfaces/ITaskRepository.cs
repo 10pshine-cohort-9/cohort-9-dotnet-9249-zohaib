@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Interfaces;
 public interface ITaskRepository
 {
     Task<TaskItem?> GetByIdAsync(int id);
-    Task<(IReadOnlyList<TaskItem> Items, int TotalCount)> GetPagedAsync(int? userId, bool idAdmin, TaskListQuery query);
+    Task<(IReadOnlyList<TaskItem> Items, int TotalCount)> GetPagedAsync(int? userId, bool isAdmin, TaskListQuery query);
     Task<DashboardStatsDto> GetStatsAsync(int? userId, bool isAdmin);
     Task AddAsync(TaskItem task); 
     Task UpdateAsync(TaskItem task);

@@ -6,6 +6,7 @@ public class PasswordHasher : IPasswordHasher
 {
     public string HashPassword(string password)
     {
+        ArgumentNullException.ThrowIfNull(password);
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 

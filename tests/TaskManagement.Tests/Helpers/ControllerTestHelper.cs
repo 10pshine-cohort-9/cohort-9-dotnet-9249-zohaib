@@ -8,6 +8,8 @@ public static class ControllerTestHelper
 {
     public static void SetUser(ControllerBase controller, int userId, string role)
     {
+        ArgumentNullException.ThrowIfNull(controller);
+        ArgumentNullException.ThrowIfNull(role);
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userId.ToString()),

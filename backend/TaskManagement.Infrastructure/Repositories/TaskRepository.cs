@@ -26,6 +26,8 @@ public class TaskRepository: ITaskRepository
 
     public async Task<(IReadOnlyList<TaskItem> Items, int TotalCount)> GetPagedAsync(int? userId, bool isAdmin, TaskListQuery query)
     {
+        ArgumentNullException.ThrowIfNull(query);
+        
         var q = _context.Tasks
                     .Include(t => t.AssignedUser)
                     .Include(t => t.CreatedBy)

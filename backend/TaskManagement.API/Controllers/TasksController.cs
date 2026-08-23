@@ -24,7 +24,7 @@ public class TasksController: ControllerBase
 
 
     [HttpGet]
-    public async Task<ActionResult<TaskDto>> GetTasks([FromQuery] TaskListQuery query)
+    public async Task<ActionResult<PaginatedResult<TaskDto>>> GetTasks([FromQuery] TaskListQuery query)
     {
         int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
         var role = User.FindFirstValue(ClaimTypes.Role) ?? "User";
@@ -52,7 +52,7 @@ public class TasksController: ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TaskDto>> GetTask(int id)
+    public async Task<ActionResult<PaginatedResult<TaskDto>>> GetTask(int id)
     {
         int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
         var role = User.FindFirstValue(ClaimTypes.Role) ?? "User";
